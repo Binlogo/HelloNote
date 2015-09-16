@@ -37,6 +37,7 @@
 		6A5539D51BA83ABA00C87869 /* BYUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A5539D41BA83ABA00C87869 /* BYUser.m */; };
 		6A5539D81BA83BF800C87869 /* BYNotePicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A5539D71BA83BF800C87869 /* BYNotePicture.m */; };
 		6A5539DB1BA83C4600C87869 /* BYNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A5539DA1BA83C4600C87869 /* BYNote.m */; };
+		6A5539E01BA8622A00C87869 /* BYPostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A5539DF1BA8622A00C87869 /* BYPostView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,8 @@
 		6A5539D71BA83BF800C87869 /* BYNotePicture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BYNotePicture.m; sourceTree = "<group>"; };
 		6A5539D91BA83C4600C87869 /* BYNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BYNote.h; sourceTree = "<group>"; };
 		6A5539DA1BA83C4600C87869 /* BYNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BYNote.m; sourceTree = "<group>"; };
+		6A5539DE1BA8622A00C87869 /* BYPostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BYPostView.h; sourceTree = "<group>"; };
+		6A5539DF1BA8622A00C87869 /* BYPostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BYPostView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +156,7 @@
 		6A5539581BA7CA6700C87869 /* HelloNote */ = {
 			isa = PBXGroup;
 			children = (
+				6A5539DC1BA861EF00C87869 /* PostNote */,
 				6A5539C31BA8082200C87869 /* Home */,
 				6A5539C41BA8084400C87869 /* Popular */,
 				6A5539C51BA8085300C87869 /* Common */,
@@ -340,6 +344,23 @@
 			name = View;
 			sourceTree = "<group>";
 		};
+		6A5539DC1BA861EF00C87869 /* PostNote */ = {
+			isa = PBXGroup;
+			children = (
+				6A5539DD1BA861FC00C87869 /* View */,
+			);
+			name = PostNote;
+			sourceTree = "<group>";
+		};
+		6A5539DD1BA861FC00C87869 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6A5539DE1BA8622A00C87869 /* BYPostView.h */,
+				6A5539DF1BA8622A00C87869 /* BYPostView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -453,6 +474,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A5539BC1BA7FDC100C87869 /* BYHomeViewController.m in Sources */,
+				6A5539E01BA8622A00C87869 /* BYPostView.m in Sources */,
 				6A5539CF1BA8334800C87869 /* BYNavItem.m in Sources */,
 				6A5539C21BA7FE2400C87869 /* BYTabBarViewController.m in Sources */,
 				6A5539D81BA83BF800C87869 /* BYNotePicture.m in Sources */,

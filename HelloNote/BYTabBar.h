@@ -20,6 +20,8 @@
 
 @interface BYTabBar : UITabBar
 
+@property (nonatomic, weak) UIButton *postButton;
+
 @property (nonatomic, weak) id<BYTabBarDelegate> postButtonDelegate;
 
 @end

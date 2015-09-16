@@ -10,7 +10,7 @@
 
 @interface BYTabBar ()
 
-@property (nonatomic, weak) UIButton *postButton;
+
 
 @end
 
@@ -21,13 +21,13 @@
         // 添加TabBar中间按钮
         UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
         // 设置按钮的不同状态
-        [postButton setImage:[UIImage imageNamed:@"cameratool-on"] forState:UIControlStateNormal];
-        [postButton setImage:[UIImage imageNamed:@"cameratool-down"] forState:UIControlStateHighlighted];
-        [postButton setImage:[UIImage imageNamed:@"cameratool-off"] forState:UIControlStateSelected];
-        [postButton setBackgroundImage:[UIImage imageNamed:@"bg_joblist_search"] forState:UIControlStateNormal];
+        [postButton setImage:[UIImage imageNamed:@"home-view-new-space-down"] forState:UIControlStateNormal];
+        [postButton setImage:[UIImage imageNamed:@"toast_icon_fail"] forState:UIControlStateSelected];
+
+        [postButton setBackgroundImage:[UIImage imageNamed:@"mixer-on"] forState:UIControlStateSelected];
         
-        CGFloat btnW = postButton.currentImage.size.width + 8;
-        CGFloat btnH = postButton.currentImage.size.height + 8;
+        CGFloat btnW = 80 ;
+        CGFloat btnH = btnW ;
         postButton.frame = CGRectMake(0, 0, btnW, btnH);
         
         [postButton addTarget:self action:@selector(postButtonClicked:) forControlEvents:UIControlEventTouchUpInside];

@@ -11,6 +11,7 @@
 #import "BYPopularViewController.h"
 #import "BYNavigationController.h"
 #import "BYTabBar.h"
+#import "BYPostView.h"
 
 @interface BYTabBarViewController () <BYTabBarDelegate,UITabBarDelegate>
 
@@ -68,7 +69,15 @@
 #pragma mark TabBarDelegate Methods
 
 - (void)postButtonClickedOnTabBar:(BYTabBar *)tabBar {
-    
+    tabBar.postButton.selected = !tabBar.postButton.selected;
+    if (tabBar.postButton.selected) {
+        BYPostView *postView = [[BYPostView alloc] init];
+        postView.tag = 200;
+        [self.view addSubview:postView];
+    } else {
+        [[self.view viewWithTag:200] removeFromSuperview];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning {
