@@ -7,8 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "UMSocial.h"
-#import "UMSocialSinaHandler.h"
+//#import "UMSocial.h"
+//#import "UMSocialSinaHandler.h"
 
 @interface AppDelegate ()
 
@@ -21,8 +21,8 @@
     /**
      *  设置友盟AppKey: 55f78ee5e0f55a50bb002b0f
      */
-    [UMSocialData setAppKey:@"55f78ee5e0f55a50bb002b0f"];
-    [UMSocialSinaHandler openSSOWithRedirectURL:@"http://sns.whalecloud.com/sina2/callback"];
+//    [UMSocialData setAppKey:@"55f78ee5e0f55a50bb002b0f"];
+//    [UMSocialSinaHandler openSSOWithRedirectURL:@"http://sns.whalecloud.com/sina2/callback"];
     return YES;
 }
 

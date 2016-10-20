@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class BYPostView;
+
+@protocol PostViewDelegate <NSObject>
+
+- (void)postButtonClicked:(UIButton *)button onPostView:(BYPostView *)postView;
+
+@end
+
 @interface BYPostView : UIView
+
+@property (nonatomic, weak) id <PostViewDelegate> delegate;
 
 @end

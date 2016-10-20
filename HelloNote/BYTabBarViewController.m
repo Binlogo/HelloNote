@@ -12,8 +12,17 @@
 #import "BYNavigationController.h"
 #import "BYTabBar.h"
 #import "BYPostView.h"
+#import "TWPhotoPickerController.h"
+#import "BYPostNoteViewController.h"
+#import "HACollectionViewSmallLayout.h"
+#import "HATransitionController.h"
 
-@interface BYTabBarViewController () <BYTabBarDelegate,UITabBarDelegate>
+@interface BYTabBarViewController () <PostViewDelegate,UINavigationControllerDelegate, HATransitionControllerDelegate>
+
+@property (nonatomic, weak) UIButton *plusButton;
+
+@property (nonatomic, strong) HATransitionController *transitionController;
+@property (nonatomic, strong) BYNavigationController *nav;
 
 @end
 
@@ -31,19 +40,22 @@
     // 定制TabBar
     BYTabBar *tabBar = [[BYTabBar alloc] init];
     [self setValue:tabBar forKeyPath:@"tabBar"];
-    tabBar.postButtonDelegate = self;
     
     // 创建TabBar模块的控制器，并设置TabBarItem状态图片和title
+    HACollectionViewSmallLayout *smallLayout = [[HACollectionViewSmallLayout alloc] init];
     
-    BYHomeViewController *homeViewController = [[BYHomeViewController alloc] init];
-    homeViewController.title = @"主页";
+    BYHomeViewController *homeViewController = [[BYHomeViewController alloc] initWithCollectionViewLayout: smallLayout];
+    homeViewController.title = @"笔记说";
     [self addChildVCWithChildVC:homeViewController image:@"icon_home_nor" selectedImage:@"icon_home_pre"];
     
     BYPopularViewController *popularViewController = [[BYPopularViewController alloc] init];
     popularViewController.title = @"人气榜";
     [self addChildVCWithChildVC:popularViewController image:@"icon_find_nor" selectedImage:@"icon_find_pre"];
     
+    [self addPlusButton];
 }
+
+#pragma mark - Custom Methods
 
 - (void)addChildVCWithChildVC:(UIViewController *)childVC image:(NSString *)image selectedImage:(NSString *)selectedImage
 {
@@ -62,23 +74,155 @@
     
     //每个模块都是各自导航控制器的根控制器
     BYNavigationController *nav = [[BYNavigationController alloc] initWithRootViewController:childVC];
+    if ([childVC isKindOfClass:NSClassFromString(@"HASmallCollectionViewController")]) {
+        nav.delegate = self;
+//        nav.navigationBarHidden = YES;
+        self.nav = nav;
+        
+        self.transitionController = [[HATransitionController alloc] initWithCollectionView:[(BYHomeViewController *)childVC collectionView]];
+        self.transitionController.delegate = self;
+
+    }
     //添加每个nav控制器至tabBarVC
     [self addChildViewController:nav];
 }
 
-#pragma mark TabBarDelegate Methods
+- (void)addPlusButton {
+    
+    UIButton *plusView = [UIButton buttonWithType:UIButtonTypeCustom];
+    [plusView setImage:[UIImage imageNamed:@"home-view-new-space-up"] forState:UIControlStateNormal];
+    [plusView setImage:[UIImage imageNamed:@"home-view-new-space-down"] forState:UIControlStateHighlighted];
+    
+    CGFloat plusW = 60 ;
+    CGFloat plusH = plusW ;
+    plusView.frame = CGRectMake((self.view.frame.size.width - plusW) / 2.f, self.view.frame.size.height - plusH, plusW, plusH);
+    
+    [plusView addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:plusView];
+    self.plusButton = plusView;
+}
 
-- (void)postButtonClickedOnTabBar:(BYTabBar *)tabBar {
-    tabBar.postButton.selected = !tabBar.postButton.selected;
-    if (tabBar.postButton.selected) {
-        BYPostView *postView = [[BYPostView alloc] init];
+- (void)postTextNote {
+    NSLog(@"发文字笔记");
+    BYPostNoteViewController *postNoteViewController = [[BYPostNoteViewController alloc] init];
+    BYNavigationController *postNav = [[BYNavigationController alloc] init];
+    [postNav addChildViewController:postNoteViewController];
+    [self presentViewController:postNav animated:YES completion:nil];
+}
+
+- (void)postPhotoNote {
+    NSLog(@"发图片笔记");
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        BYPostNoteViewController *photoPostViewController = [[BYPostNoteViewController alloc] init];
+        [self presentViewController:photoPostViewController animated:YES completion:nil];
+    }
+}
+
+- (void)postCameraNote {
+    NSLog(@"拍照发笔记");
+}
+
+- (void)plusButtonClicked:(UIButton *)sender {
+    
+    self.plusButton.selected = !self.plusButton.selected;
+    if (self.plusButton.selected) {
+        UIButton *fullView = [[UIButton alloc] initWithFrame:self.view.frame];
+        fullView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.3];
+        fullView.tag = 333;
+        fullView.userInteractionEnabled = YES;
+        [fullView addTarget:self action:@selector(fullMaskViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.plusButton.backgroundColor = [UIColor whiteColor];
+        self.plusButton.layer.cornerRadius = 30;
+        [self.plusButton clipsToBounds];
+        [UIView animateWithDuration:0.2f animations:^{
+            [sender setTransform:CGAffineTransformMakeRotation(M_PI_4 * 3)];
+        }];
+        BYPostView *postView = [[BYPostView alloc] initWithFrame:CGRectMake(self.plusButton.center.x, self.plusButton.center.y, 0, 0)];
         postView.tag = 200;
-        [self.view addSubview:postView];
+        postView.delegate = self;
+        [self.view addSubview:fullView];
+        [fullView addSubview:postView];
+        [self.view bringSubviewToFront:self.plusButton];
     } else {
+        UIView *fullView = [self.view viewWithTag:333];
+        [fullView removeFromSuperview];
+        [UIView animateWithDuration:0.2f animations:^{
+        [sender setTransform:CGAffineTransformMakeRotation(0.f)];
+        sender.backgroundColor = [UIColor clearColor];
+        }];
         [[self.view viewWithTag:200] removeFromSuperview];
     }
 
 }
+
+- (void) fullMaskViewClicked:(UIButton *)sender {
+    [self plusButtonClicked:self.plusButton];
+}
+
+#pragma mark - PostViewDelegate Methods
+
+- (void)postButtonClicked:(UIButton *)button onPostView:(BYPostView *)postView {
+    
+    if (button.tag == kPostTextButtonTag /*文字*/) {
+        [self postTextNote];
+    } else if (button.tag == kPostPhotoButtonTag /*照片*/) {
+        [self postPhotoNote];
+    } else if (button.tag == kPostCameraButtonTag /*拍照*/) {
+        [self postCameraNote];
+    }
+    
+    [self plusButtonClicked:self.plusButton];
+}
+
+#pragma mark - NavigationAndTransitionDelegate Methods
+
+- (void)interactionBeganAtPoint:(CGPoint)point
+{
+    // Very basic communication between the transition controller and the top view controller
+    // It would be easy to add more control, support pop, push or no-op
+    HASmallCollectionViewController *presentingVC = (HASmallCollectionViewController *)[self.navigationController topViewController];
+    HASmallCollectionViewController *presentedVC = (HASmallCollectionViewController *)[presentingVC nextViewControllerAtPoint:point];
+    if (presentedVC!=nil)
+    {
+        [self.navigationController pushViewController:presentedVC animated:YES];
+    }
+    else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+
+- (id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
+                          interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController
+{
+    if (animationController==self.transitionController) {
+        return self.transitionController;
+    }
+    return nil;
+}
+
+
+- (id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                   animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                fromViewController:(UIViewController *)fromVC
+                                                  toViewController:(UIViewController *)toVC
+{
+    if (![fromVC isKindOfClass:[UICollectionViewController class]] || ![toVC isKindOfClass:[UICollectionViewController class]])
+    {
+        return nil;
+    }
+    if (!self.transitionController.hasActiveInteraction)
+    {
+        return nil;
+    }
+    
+    self.transitionController.navigationOperation = operation;
+    return self.transitionController;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

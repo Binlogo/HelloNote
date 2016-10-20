@@ -10,7 +10,7 @@
 
 @interface BYTabBar ()
 
-
+@property (nonatomic, weak) UIView *placeHolderView;
 
 @end
 
@@ -18,37 +18,26 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        // 添加TabBar中间按钮
-        UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        // 设置按钮的不同状态
-        [postButton setImage:[UIImage imageNamed:@"home-view-new-space-down"] forState:UIControlStateNormal];
-        [postButton setImage:[UIImage imageNamed:@"toast_icon_fail"] forState:UIControlStateSelected];
-
-        [postButton setBackgroundImage:[UIImage imageNamed:@"mixer-on"] forState:UIControlStateSelected];
+        // TabBar中间按钮占位
+        UIView *placeHolderView = [[UIView alloc] init];
         
-        CGFloat btnW = 80 ;
-        CGFloat btnH = btnW ;
-        postButton.frame = CGRectMake(0, 0, btnW, btnH);
-        
-        [postButton addTarget:self action:@selector(postButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:postButton];
-        self.postButton = postButton;
+        [self addSubview:placeHolderView];
+        self.placeHolderView = placeHolderView;
     }
     return self;
-}
-
-- (void)postButtonClicked:(UIButton *)sender {
-    if ([self.postButtonDelegate respondsToSelector:@selector(postButtonClickedOnTabBar:)]) {
-        [self.postButtonDelegate postButtonClickedOnTabBar:self];
-    }
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
+    CGFloat btnW = self.frame.size.width / 3.f;
+    CGFloat btnH = self.frame.size.height;
+    
+    self.placeHolderView.frame = CGRectMake(0, 0, btnW, btnH);
+    
     CGFloat btnCenterX = self.frame.size.width * 0.5;
     CGFloat btnCenterY = self.frame.size.height * 0.5;
-    self.postButton.center = CGPointMake(btnCenterX, btnCenterY);
+    self.placeHolderView.center = CGPointMake(btnCenterX, btnCenterY);
     
     int tabBarButtonIndex = 0;
     for (UIView *child in self.subviews) {

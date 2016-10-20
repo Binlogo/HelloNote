@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BYBaseViewController.h"
+#import "HASmallCollectionViewController.h"
 
-@interface BYHomeViewController : BYBaseViewController
+@interface BYHomeViewController : HASmallCollectionViewController
 
 @end

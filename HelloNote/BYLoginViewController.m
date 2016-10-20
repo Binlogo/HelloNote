@@ -7,8 +7,9 @@
 //
 
 #import "BYLoginViewController.h"
-#import "UMSocial.h"
+//#import "UMSocial.h"
 #import "BYTabBarViewController.h"
+
 
 @interface BYLoginViewController ()
 
@@ -20,6 +21,7 @@
     [super viewDidLoad];
 
 }
+
 
 - (IBAction)sinaLogin:(UIButton *)sender {
 //    UMSocialSnsPlatform *weiboPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToSina];

@@ -22,11 +22,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupNavigationBar];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
 }
 
 - (void)setupNavigationBar {
     self.navigationItem.leftBarButtonItem = [BYNavItem navItemWithTarget:self action:@selector(userInformation) image:@"icon_setting_nor" selectedImage:@"icon_setting_pre"];
     self.navigationItem.rightBarButtonItem = [BYNavItem navItemWithTarget:self action:@selector(more) image:@"navigationbar_more" selectedImage:@"navigationbar_more_highlighted"];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return NO;
 }
 
 - (void)userInformation {

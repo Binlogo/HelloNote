@@ -10,18 +10,7 @@
 
 @class BYTabBar;
 
-@protocol BYTabBarDelegate <NSObject>
-
-@optional
-
-- (void)postButtonClickedOnTabBar:(BYTabBar *)tabBar;
-
-@end
-
 @interface BYTabBar : UITabBar
 
-@property (nonatomic, weak) UIButton *postButton;
-
-@property (nonatomic, weak) id<BYTabBarDelegate> postButtonDelegate;
 
 @end
